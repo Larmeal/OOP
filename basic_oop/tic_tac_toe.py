@@ -4,7 +4,7 @@ class TicTacToeGame:
         self.player_2_char = ""
         self.player_pattern = {"|x|": [], "|o|": []}
         self.player_score = {"|x|": 0, "|o|": 0}
-        self.again = {"1": "YES", "2": "NO"}
+        self.result = 0
         self.player_input = 0
         self.game_stage = 0
         self.board = [
@@ -90,6 +90,7 @@ class TicTacToeGame:
         for pattern in win_pattern:
             if set(pattern).issubset(set(self.player_pattern[player])):
                 self.game_stage = 999
+                self.result = 1
 
     def update_player_pattern(self, player, player_input):
         self.player_pattern[player].append(player_input)
@@ -108,13 +109,20 @@ class TicTacToeGame:
         self.board[player_input] = player
 
     def continue_the_game(self, player):
-        self.player_score[player] += 1
-        print(
-            f"""
-                Awesome. Player {self.player[1]} won the game! 🎉
-                with score {self.player_score[self.player]} - {self.player_score["|o|" if self.player == "|x|" else "|x|"]}
-            """
-        )
+        if self.result == 0:
+            print(
+                """
+                    The final score is DRAW!!!
+                """
+            )
+        elif self.result == 1:
+            self.player_score[player] += 1
+            print(
+                f"""
+                    Awesome. Player {self.player[1]} won the game! 🎉
+                    with score {self.player_score[self.player]} - {self.player_score["|o|" if self.player == "|x|" else "|x|"]}
+                """
+            )
         continue_stage = int(
             input("Would you like to play again? Enter 1 for 'YES' or 2 for 'NO': ")
         )
@@ -183,7 +191,7 @@ class TicTacToeGame:
                 self.condition_win(player=self.player)
 
             self.game_stage += 1
-            if self.game_stage > 9:
+            if self.game_stage >= 9:
                 self.continue_the_game(player=self.player)
 
 
